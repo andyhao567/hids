@@ -70,6 +70,7 @@ def start_package_name():
 
 def build(build_path):
     # 复制web文件目录到编译目录下
+    cPath = os.getcwd()
     web_path = os.path.join(build_path, 'web')
     os.mkdir(web_path, mode=0o755)
     for dir_name in web_dir_lst:
@@ -79,14 +80,16 @@ def build(build_path):
     # 编译各个由go(或cgo)所编写的程序
     for type_ in main_function_lst:
         go_source = main_function_lst[type_]
+        #print ("go_source is: {}".format(cPath + '/../' + go_source))
         if is_win():
             exe_path = os.path.join(build_path, make_execute_name(type_))
             exe_path = exe_path.replace('\\', '\\\\')
             go_source = go_source.replace('/', '\\\\')
         else:
+            go_source = cPath + '/../' + go_source
             exe_path = os.path.join(build_path, make_execute_name(type_))
         command = base_command.format(out=exe_path, source=go_source)
-        print('[*] run command:', command)
+        print('[*] current running command is :', command)
         command_args = shlex.split(command)
         output = subprocess.check_output(
             command_args,
