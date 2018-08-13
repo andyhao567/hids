@@ -170,7 +170,7 @@ func setConfig() {
 	Config.BlackList = res3.Dic
 	Config.WhiteList = res4.Dic
 	Config.Notice = res5.Dic
-	log.Println("Config is ", res.Dic)
+	//log.Println("Config is ", res.Dic)
 }
 
 // setRules 获取异常规则集

@@ -59,11 +59,11 @@ func auth(ctx context.Context, req *protocol.Message, token string) error {
 }
 
 func init() {
-	log.Println("models.Config.Cert is ", models.Config.Cert)
+	//log.Println("models.Config.Cert is ", models.Config.Cert)
 	// 从数据库获取证书和RSA私钥
 	//ioutil.WriteFile("cert.pem", []byte(models.Config.Cert), 0666)
 	//ioutil.WriteFile("private.pem", []byte(models.Config.Private), 0666)
-	log.Println("i have write the cert and private into Config, current Config is", models.Config)
+	//log.Println("i have write the cert and private into Config, current Config is", models.Config)
 	// 启动心跳线程
 	go models.Heartbeat()
 	// 启动推送任务线程
