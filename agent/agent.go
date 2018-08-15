@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) <= 1 {
-		fmt.Println("Usage: agent[.exe] ServerIP [debug]")
+		fmt.Println("Usage: agent[.exe] WebServerIP [debug]")
 		fmt.Println("Example: agent 8.8.8.8 debug")
 		return
 	}

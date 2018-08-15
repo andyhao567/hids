@@ -7,6 +7,7 @@ import (
 )
 
 func conn(netloc string, dbname string) (*mgo.Database, error) {
+	log.Println("[mongo conn] current netloc is ", netloc, "dbname is", dbname)
 	session, err := mgo.Dial(netloc)
 	if err != nil {
 		return nil, err

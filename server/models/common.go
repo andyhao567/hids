@@ -149,7 +149,6 @@ func getLocalIP(ip string) (string, error) {
 func setConfig() {
 	log.Println("i have entry [common setConfig] phrase")
 	c := DB.C("config")
-	log.Println("get the config from mongod is ", *c)
 	res := configres{}
 	c.Find(bson.M{"type": "server"}).One(&res)
 
@@ -181,8 +180,10 @@ func setRules() {
 
 // regServer 注册为服务，Agent才知道发给谁
 func regServer() {
+	LocalIP := "39.105.20.65"
 	c := DB.C("server")
 	_, err := c.Upsert(bson.M{"netloc": LocalIP + ":33433"}, bson.M{"$set": bson.M{"uptime": time.Now()}})
+	log.Println("[common regServer] current LocalIP = ", LocalIP)
 	if err != nil {
 		log.Println(err.Error())
 	}

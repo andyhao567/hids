@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"fmt"
 	"strings"
 	"time"
 
@@ -235,6 +236,7 @@ func InsertThread() {
 	var data esData
 	for {
 		data = <-esChan
+		log.Println("[models InsertThread] current data is", data)
 		_, err := Client.Index().
 			Index(nowindicesName).
 			Type(data.dataType).
@@ -249,6 +251,7 @@ func InsertThread() {
 // InsertEs 将数据插入es
 func InsertEs(dataType string, data ESSave) {
 	esChan <- esData{dataType, data}
+	fmt.Printf("[models InsertEs] esData is %+v\n", esChan)
 }
 
 func esCheckThread() {

@@ -3,6 +3,7 @@ package action
 import (
 	"strconv"
 	"time"
+	"log"
 	"yulong-hids/server/models"
 
 	"gopkg.in/mgo.v2/bson"
@@ -32,6 +33,7 @@ func ResultSave(datainfo models.DataInfo) error {
 					Data: logininfo,
 					Time: time,
 				}
+				log.Println("[save ResultSave-logininfo] current datainfo.Type is: ", datainfo.Type, "current esdata is:", esdata)
 				models.InsertEs(datainfo.Type, esdata)
 			}
 		} else {
@@ -45,9 +47,10 @@ func ResultSave(datainfo models.DataInfo) error {
 				Data: datainfo.Data[0],
 				Time: time.Unix(int64(dataTimeInt), 0),
 			}
+			log.Println("[save ResultSave-other] current datainfo.Type is: ", datainfo.Type, "current esdata is:", esdata)
 			models.InsertEs(datainfo.Type, esdata)
 		}
-	} else {
+	} else {	//save INFORMATION into mongodb
 		c := models.DB.C("info")
 		count, _ := c.Find(bson.M{"ip": datainfo.IP, "type": datainfo.Type}).Count()
 		if count >= 1 {

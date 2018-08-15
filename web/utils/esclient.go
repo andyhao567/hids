@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"log"
 	"strconv"
 
 	"gopkg.in/mgo.v2/bson"
@@ -24,6 +25,7 @@ func NewSession() ElasticSearch {
 	var es ElasticSearch
 	var err error
 	baseurl := beego.AppConfig.String("elastic_search::baseurl")
+	log.Println("[esclient NewSession] current baseurl is ", baseurl)
 	es.baseurl, err = url.Parse(baseurl)
 	if err != nil {
 		beego.Error("Es baseurl", baseurl)
