@@ -3,8 +3,8 @@ package models
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -13,182 +13,117 @@ import (
 
 var processMapping = `
 {
-	"properties": {
-		"data": {
-			"properties": {
-				"command": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 256,
-							"type": "keyword"
-						}
-					}
-				},
-				"name": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 128,
-							"type": "keyword"
-						}
-					}
-				},
-				"parentname": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 128,
-							"type": "keyword"
-						}
-					}
-				},
-				"pid": {
-					"type": "keyword"
-				},
-				"ppid": {
-					"type": "keyword"
-				}
-			}
-		},
-		"ip": {
-			"type": "ip"
-		},
-		"time": {
-			"type": "date"
-		}
-	}
-}`
-var fileMapping = `
-{
-	"properties": {
-		"data": {
-			"properties": {
-				"action": {
-					"type": "keyword"
-				},
-				"path": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 256,
-							"type": "keyword"
-						}
-					}
-				},
-				"hash":{
-					"type" :"keyword"
-				},
-				"user":{
-					"type" :"string",
-					"fields": {
-						"keyword": {
-							"ignore_above": 40,
-							"type": "keyword"
-						}
-					}
-				}
-			}
-		},
-		"ip": {
-			"type": "ip"
-		},
-		"time": {
-			"type": "date"
-		}
-	}
-}`
-
-var loginlogMapping = `
-{
-	"properties": {
-		"data": {
-			"properties": {
-				"username": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 40,
-							"type": "keyword"
-						}
-					}
-				},
-				"hostname": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 40,
-							"type": "keyword"
-						}
-					}
-				},
-				"remote": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 25,
-							"type": "keyword"
-						}
-					}
-				},
-				"status": {
-					"type": "keyword"
-				}
-			}
-		},
-		"ip": {
-			"type": "ip"
-		},
-		"time": {
-			"type": "date"
-		}
-	}
-}`
-
-var connectionMapping = `
-{
-	"properties": {
-		"data": {
-			"properties": {
-				"dir": {
-					"type": "keyword"
-				},
-				"remote": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 25,
-							"type": "keyword"
-						}
-					}
-				},
-				"local": {
-					"type": "text"
-				},
-				"name":{
-					"type":"text",
-					"fields": {
-						"keyword": {
-							"ignore_above": 40,
-							"type": "keyword"
-						}
-					}
-				},
-				"pid":{
-					"type":"keyword"
-				},
-				"protocol": {
-					"type": "keyword"
-				}
-			}
-		},
-		"ip": {
-			"type": "ip"
-		},
-		"time": {
-			"type": "date"
-		}
-	}
+  "mappings": {
+    "ttype": {
+      "type": "keyword"
+    },
+    "data": {
+      "properties": {
+        "action": {
+          "type": "keyword"
+        },
+        "path": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 256,
+              "type": "keyword"
+            }
+          }
+        },
+        "hash":{
+          "type" :"keyword"
+        },
+        "user":{
+          "type" :"string",
+          "fields": {
+            "keyword": {
+              "ignore_above": 40,
+              "type": "keyword"
+            }
+          }
+        },
+        "username": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 40,
+              "type": "keyword"
+            }
+          }
+        },
+        "hostname": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 40,
+              "type": "keyword"
+            }
+          }
+        },
+        "remote": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 25,
+              "type": "keyword"
+            }
+          }
+        },
+        "status": {
+          "type": "keyword"
+        },
+        "dir": {
+          "type": "keyword"
+        },
+        "local": {
+          "type": "text"
+        },
+        "protocol": {
+          "type": "keyword"
+        },
+        "command": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 256,
+              "type": "keyword"
+            }
+          }
+        },
+        "name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 128,
+              "type": "keyword"
+            }
+          }
+        },
+        "parentname": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 128,
+              "type": "keyword"
+            }
+          }
+        },
+        "pid": {
+          "type": "keyword"
+        },
+        "ppid": {
+          "type": "keyword"
+        }
+      }
+    },
+    "ip": {
+      "type": "ip"
+    },
+    "time": {
+      "type": "date"
+    }
+  }
 }`
 
 // ESSave 插入es记录结构
@@ -196,6 +131,7 @@ type ESSave struct {
 	IP   string            `json:"ip"`
 	Data map[string]string `json:"data"`
 	Time time.Time         `json:"time"`
+	TType string	       `json: "ttype"`
 }
 
 type esData struct {
@@ -214,7 +150,7 @@ func init() {
 	nowindicesName = "monitor" + nowDate
 	log.Println("nowindicesName = ", nowindicesName)
 	var err error
-	Client, err = elastic.NewClient(elastic.SetURL("http://" + *es), elastic.SetSniff(false))
+	Client, err = elastic.NewClient(elastic.SetURL("http://"+*es), elastic.SetSniff(false))
 	log.Println("es address is = ", *es)
 	if err != nil {
 		log.Println("Elastic NewClient error: ", err.Error())
@@ -236,10 +172,12 @@ func InsertThread() {
 	var data esData
 	for {
 		data = <-esChan
-		log.Println("[models InsertThread] current data is", data)
+		log.Println("[models InsertThread] before data Type is", data.dataType, "current data is", data.data)
+		data.data.TType = data.dataType
+		log.Println("[models InsertThread] after data Type is", data.dataType, "current data is", data.data)
 		_, err := Client.Index().
 			Index(nowindicesName).
-			Type(data.dataType).
+			Type("doc").
 			BodyJson(data.data).
 			Do(context.Background())
 		if err != nil {
@@ -279,12 +217,13 @@ func esCheckThread() {
 }
 
 func newIndex(name string) {
-	log.Println("init indice", name)
+	//log.Println("[es newIndex] current init indice is", name)
 	Client.CreateIndex(name).Do(context.Background())
-	Client.PutMapping().Index(name).Type("process").BodyString(processMapping).Do(context.Background())
-	Client.PutMapping().Index(name).Type("connection").BodyString(connectionMapping).Do(context.Background())
-	Client.PutMapping().Index(name).Type("loginlog").BodyString(loginlogMapping).Do(context.Background())
-	Client.PutMapping().Index(name).Type("file").BodyString(fileMapping).Do(context.Background())
+	Client.PutMapping().Index(name).Type("doc").BodyString(processMapping).Do(context.Background())
+	log.Println("[es newIndex] i have created the index and mapping success")
+	//	Client.PutMapping().Index(name).Type("connection").BodyString(connectionMapping).Do(context.Background())
+	//	Client.PutMapping().Index(name).Type("loginlog").BodyString(loginlogMapping).Do(context.Background())
+	//	Client.PutMapping().Index(name).Type("file").BodyString(fileMapping).Do(context.Background())
 }
 
 // QueryLogLastTime 查询ip最后一条登录日志的时间

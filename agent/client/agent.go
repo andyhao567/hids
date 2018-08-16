@@ -54,7 +54,7 @@ func (a *Agent) init() {
 		panic(1)
 	}
 	a.ctx = context.WithValue(context.Background(), share.ReqMetaDataKey, make(map[string]string))
-	a.log("Available server node:", a.ServerList)
+	a.log("[agent init] current Available server node:", a.ServerList)
 	if len(a.ServerList) == 0 {
 		time.Sleep(time.Second * 30)
 		a.log("No server node available")
@@ -71,7 +71,7 @@ func (a *Agent) init() {
 		a.log("RPC Client Call Error:", err.Error())
 		panic(1)
 	}
-	a.log("Common Client Config:", common.Config)
+	a.log("[agent init] Common Client Config:", common.Config)
 }
 
 // Run 启动agent
@@ -215,11 +215,13 @@ func (a *Agent) monitor() {
 		for {
 			data = <-result
 			data["time"] = fmt.Sprintf("%d", time.Now().Unix())
-			a.log("Monitor data: ", data)
+			a.log("[agent monitor:218] Monitor data: ", data)
 			source := data["source"]
 			delete(data, "source")
+			a.log("[agent monitor:221] delete source is ", source, "data is ", data )
 			a.Mutex.Lock()
 			a.PutData = dataInfo{common.LocalIP, source, runtime.GOOS, append(resultdata, data)}
+			a.log("[agent monitor:224] current dataInfo is ", a.PutData)
 			a.put()
 			a.Mutex.Unlock()
 		}
@@ -231,21 +233,23 @@ func (a *Agent) getInfo() {
 	for {
 		if len(common.Config.MonitorPath) == 0 {
 			time.Sleep(time.Second)
-			a.log("Failed to get the configuration information")
+			a.log("[agent getInfo] Failed to get the configuration information")
 			continue
 		}
 		allData := collect.GetAllInfo()
 		for k, v := range allData {
 			if len(v) == 0 || a.mapComparison(v, historyCache[k]) {
-				a.log("GetInfo Data:", k, "No change")
+				a.log("[agent getInfo:242] GetInfo Data:", k, "No change")
 				continue
 			} else {
+
 				a.Mutex.Lock()
 				a.PutData = dataInfo{common.LocalIP, k, runtime.GOOS, v}
+				a.log("[agent getInfo] current PutData is:", a.PutData)
 				a.put()
 				a.Mutex.Unlock()
 				if k != "service" {
-					a.log("Data details:", k, a.PutData)
+					a.log("[agent getInfo] Data details:", k, a.PutData)
 				}
 				historyCache[k] = v
 			}

@@ -34,7 +34,7 @@ func ResultSave(datainfo models.DataInfo) error {
 					Time: time,
 				}
 				log.Println("[save ResultSave-logininfo] current datainfo.Type is: ", datainfo.Type, "current esdata is:", esdata)
-				models.InsertEs(datainfo.Type, esdata)
+				models.InsertEs(datainfo.Type, esdata)		//save dataInfo into ES 
 			}
 		} else {
 			dataTimeInt, err := strconv.Atoi(datainfo.Data[0]["time"])
