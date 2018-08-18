@@ -172,7 +172,7 @@ func InsertThread() {
 	var data esData
 	for {
 		data = <-esChan
-		log.Println("[models InsertThread] before data Type is", data.dataType, "current data is", data.data)
+		//log.Println("[models InsertThread] before data Type is", data.dataType, "current data is", data.data)
 		data.data.TType = data.dataType
 		log.Println("[models InsertThread] after data Type is", data.dataType, "current data is", data.data)
 		_, err := Client.Index().
@@ -193,7 +193,7 @@ func InsertEs(dataType string, data ESSave) {
 }
 
 func esCheckThread() {
-	log.Println("i have entry the [common es esCheckThread]")
+	log.Println("[es esCheckThread] i have entry the process")
 	ticker := time.NewTicker(time.Second * 3600)
 	for _ = range ticker.C {
 		nowDate := time.Now().Local().Format("2006_01")

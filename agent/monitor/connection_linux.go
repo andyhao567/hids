@@ -288,6 +288,7 @@ func StartNetSniff(resultChan chan map[string]string) {
 			} else {
 				continue
 			}
+			fmt.Sprintf("[connection_linux StartNetSniff] resultdata = %v", resultdata)
 			resultChan <- resultdata
 		}
 	}

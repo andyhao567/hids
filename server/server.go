@@ -37,7 +37,7 @@ func (w *Watcher) PutInfo(ctx context.Context, datainfo *models.DataInfo, result
 		return nil
 	}
 	datainfo.Uptime = time.Now()
-	log.Println("[server PutInfo] current datainfo is ", *datainfo)
+	//log.Println("[server PutInfo] current datainfo is ", *datainfo)
 	err := action.ResultSave(*datainfo)
 	if err != nil {
 		log.Println(err)
@@ -84,7 +84,7 @@ func main() {
 	}
 	config := &tls.Config{Certificates: []tls.Certificate{cert}}
 	s := server.NewServer(server.WithTLSConfig(config))
-	log.Println("[server main] config is ", *config)
+	//log.Println("[server main] config is ", *config)
 	s.AuthFunc = auth
 	s.RegisterName("Watcher", new(Watcher), "")
 	log.Println("RPC Server started, s is ", *s)
